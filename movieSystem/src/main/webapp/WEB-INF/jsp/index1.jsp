@@ -131,13 +131,13 @@
             <button class="dropbtn">Movie Management</button>
             <div class="dropdown-content">
                 <a href="/addMovie">Movie Addition</a>
-                <a href="/movieReportLanguage">Movie Reportbylanguage</a>
+             
                 <!-- <a href="/">Movie Deletion</a> -->
                 <a href="/movieReport">Movie Reports</a>
             </div>
         </div>
 
-        <div class="dropdown">
+      <!--   <div class="dropdown">
             <button class="dropbtn">Theater Management</button>
             <div class="dropdown-content">
                 <a href="/">Theater Addition</a>
@@ -145,7 +145,7 @@
                 <a href="/">Theater Deletion</a>
                 <a href="/">Theater Reports</a>
             </div>
-        </div>
+        </div>-->
 
         <div class="dropdown">
             <button class="dropbtn">Show Time Management</button>
@@ -158,9 +158,9 @@
         <div class="dropdown">
             <button class="dropbtn">Booking Management</button>
             <div class="dropdown-content">
-                <a href="/">New Booking</a>
-                <a href="/">Booking Update</a>
-                <a href="/">Cancellation</a>
+                <a href="/movieReportLanguage">Movie Report By Language & Booking</a>
+               <!--- <a href="/">Booking Update</a>--->
+                <a href="/viewBookings">Cancellation</a>
                 <a href="/">Booking Report</a>
             </div>
         </div>

@@ -14,4 +14,7 @@ public interface ShowTimeDao {
 	public List<Integer> getAllIds();
 	public String getShowTimeName(Integer showTimeId);
 	public ShowTime getShowTime(String showTimeName);
+	
+
+	
 }

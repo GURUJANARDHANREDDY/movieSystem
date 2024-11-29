@@ -11,4 +11,6 @@ public interface TicketBookingRepository extends JpaRepository<TicketBooking, Lo
 
     @Query("SELECT MAX(ticketId) from TicketBooking")
     public Long getLastId();
+
+	public TicketBooking findByTransactionId(String transactionId);
 }

@@ -84,6 +84,14 @@
             color: #d1d1d1; /* Lighter color for details */
         }
 
+        /* Movie image styling */
+        .movie-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 576px) {
             .movie-item h3 {
@@ -96,12 +104,12 @@
         }
 
         /* Additional Styling for the deletion link and return button */
-        .delete-link {
+        .book-movie {
             color: #ff4d4d;
             font-size: 16px;
         }
 
-        .delete-link:hover {
+        .book-movie:hover {
             text-decoration: underline;
         }
 
@@ -125,6 +133,9 @@
     <div class="movie-list">
         <c:forEach var="movie" items="${movieList}">
             <div class="movie-item">
+                <!-- Movie Image Display -->
+                <img src="${movie.url}" alt="${movie.movieName} Image" />
+
                 <h3>${movie.movieName}</h3>
                 <c:forEach var="movieShowDTO" items="${movieMap[movie.movieId]}">
                     <p>Showtime: ${movieShowDTO.showTimeName}</p>
@@ -132,7 +143,7 @@
                     <p>Premier Seats: ${movieShowDTO.premierSeatNumber} (Booked: ${movieShowDTO.premierBooked})</p>
                 </c:forEach>
                 <!-- Movie Deletion Link -->
-                <p><a class="delete-link" href="/bookMovie/${movie.movieId}"> Book Movie </a></p>
+                <p><a class="book-movie" href="/bookMovie/${movie.movieId}"> Book Movie </a></p>
             </div>
         </c:forEach>
     </div>

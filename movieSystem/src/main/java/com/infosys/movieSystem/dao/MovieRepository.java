@@ -17,4 +17,5 @@ public interface MovieRepository extends JpaRepository<Movie, String> {
 	
 	@Query("select a from Movie a where language = ?1")
 	public List<Movie> getLanguagewiseMovieList(String language);
+	 Movie findByMovieId(String movieId); 
 } 

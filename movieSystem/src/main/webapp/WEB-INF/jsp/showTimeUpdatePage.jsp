@@ -87,7 +87,7 @@
         </div>
         <div class="form-group">
             <label for="showTimeName">Show Time Name</label>
-            <form:input path="showTimeName" id="showTimeName" required="true" />
+            <form:input path="showTimeName" id="showTimeName" readonly="true" />
         </div>
         <div class="form-group">
             <label for="showTimePremierePrice">Premiere Price</label>

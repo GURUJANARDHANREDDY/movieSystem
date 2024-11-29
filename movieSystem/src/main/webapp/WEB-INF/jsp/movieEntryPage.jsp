@@ -143,6 +143,11 @@
             <label class="form-label">Enter Ratings</label>
             <form:input id="ratings" path="ratings" class="form-control" />
         </div>
+        <div class="mb-3">
+    <label class="form-label">Enter Movie URL</label>
+    <form:input id="url" path="url" class="form-control" />
+</div>
+        
 
         <div class="showtime-heading">
             <h2>ShowTime Entry</h2>

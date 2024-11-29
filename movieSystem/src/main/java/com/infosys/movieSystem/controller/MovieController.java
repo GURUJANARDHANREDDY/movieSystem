@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 
 
@@ -20,16 +21,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+
 import com.infosys.movieSystem.bean.Movie;
 import com.infosys.movieSystem.bean.MovieShow;
 import com.infosys.movieSystem.bean.MovieShowDTO;
 import com.infosys.movieSystem.bean.MovieShowEmbed;
 import com.infosys.movieSystem.bean.ShowTime;
+import com.infosys.movieSystem.bean.TicketBooking;
 import com.infosys.movieSystem.dao.MovieDao;
+
 import com.infosys.movieSystem.dao.MovieShowDao;
 import com.infosys.movieSystem.dao.ShowTimeDao;
+import com.infosys.movieSystem.dao.TicketBookingDao;
 import com.infosys.movieSystem.service.MovieUserService;
 import com.infosys.movieSystem.service.ShowTimeService;
+
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -51,6 +57,11 @@ public class MovieController {
 	
 	@Autowired
 	private MovieShowDao movieShowDao;
+	   @Autowired
+	    private TicketBookingDao ticketBookingDao;
+	   @Autowired
+	
+	
 	 
 	
 	@GetMapping("/addShowTime")
@@ -234,6 +245,7 @@ public class MovieController {
 	    // Update the movie details (only duration and ratings are updated)
 	    existingMovie.setDuration(movie.getDuration());
 	    existingMovie.setRatings(movie.getRatings());
+	    existingMovie.setUrl(movie.getUrl());
 
 	    // Save the updated movie back to the database
 	    movieDao.save(existingMovie);
@@ -385,6 +397,99 @@ public class MovieController {
 	        mv.addObject("showMap", showMap);  // Add showMap to the model if needed
 	        return mv;
 	    }
+	   
+
+	  
+
+	
+	    @GetMapping("/bookMovie/{id}")
+	    public ModelAndView showBookMoviePage(@PathVariable String id) {
+	        Movie movie = movieDao.findById(id);
+	        String movieId = movie.getMovieId();
+
+	        List<MovieShowEmbed> embedList = movieShowDao.getAllIds();
+	        List<MovieShowDTO> movieShowList = new ArrayList<>();
+
+	        for (MovieShowEmbed mse : embedList) {
+	            if (movieId.equals(mse.getMovieId())) {
+	                MovieShowEmbed mse2 = new MovieShowEmbed(movieId, mse.getShowTimeId());
+	                MovieShow movieShow = movieShowDao.getMovieShowById(mse2);
+	                String showTimeName = showTimeDao.getShowTimeName(mse.getShowTimeId());
+
+	                MovieShowDTO movieShowDTO = new MovieShowDTO(
+	                    showTimeName,
+	                    movieId,
+	                    movieShow.getRoyalSeatNumber(),
+	                    movieShow.getPremierSeatNumber(),
+	                    movieShow.getRoyalBooked(),
+	                    movieShow.getPremierBooked()
+	                );
+	                movieShowList.add(movieShowDTO);
+	            }
+	        }
+
+	        ModelAndView mv = new ModelAndView("movieBookPage");
+	        mv.addObject("movie", movie);
+	        mv.addObject("movieShowList", movieShowList);
+	        return mv;
+	    }
+
+	    @PostMapping("/bookSeats")
+	    public ModelAndView processBooking(
+	            @RequestParam String movieId,
+	            @RequestParam String movieName,
+	            @RequestParam String selectedShowTime,
+	            @RequestParam Map<String, String> allParams) {
+
+	        // Extract seat type and number of seats dynamically
+	        String seatType = allParams.get("seatType_" + selectedShowTime);
+	        Integer numberOfSeats = Integer.valueOf(allParams.get("numberOfSeats_" + selectedShowTime));
+
+	        // Fetch the ShowTime object based on selectedShowTime
+	        ShowTime showTime = showTimeDao.getShowTime(selectedShowTime); // Fetch the ShowTime based on showTimeName
+
+	        if (showTime == null) {
+	            // Handle the case where the showTime does not exist
+	            throw new IllegalArgumentException("Selected show time not found.");
+	        }
+
+	        // Retrieve prices based on seat type from ShowTime object
+	        double seatPrice = "royal".equalsIgnoreCase(seatType) ? showTime.getShowTimeRoyalPrice() : showTime.getShowTimePremierePrice();
+
+	        // Create a new ticket booking
+	        TicketBooking ticket = new TicketBooking();
+	        ticket.setMovieName(movieName);
+	        ticket.setShowTimeName(selectedShowTime);
+	        ticket.setSeatType(seatType);
+	        ticket.setNumberOfSeatBooking(numberOfSeats);
+
+	        // Generate transaction ID
+	        String transactionId = UUID.randomUUID().toString();
+	        ticket.setTransactionId(transactionId);
+
+	        // Calculate amount payable
+	        double amountPayable = numberOfSeats * seatPrice;
+	        ticket.setAmountPayable(amountPayable);
+
+	        // Set booking status
+	        ticket.setStatus("Confirmed");
+
+	        // Save ticket to the database
+	        ticketBookingDao.save(ticket);
+
+	        // Return success page
+	        ModelAndView mv = new ModelAndView("bookingSuccess");
+	        mv.addObject("ticket", ticket);
+	        return mv;
+	    }
+	 
+
+
+	 
+
+
+
+	    
 	}
 
 

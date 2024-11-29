@@ -12,19 +12,26 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        /* Background Image */
+        /* General body styling */
         body {
-            background-image: url('https://img.freepik.com/free-vector/cinema-stage-background-with-clapperboard-popcorn-chairs_1017-38722.jpg?uid=R128034498&ga=GA1.1.1443282485.1731505884&semt=ais_hybrid');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
         }
 
-        /* Responsive container for movie cards */
+        /* Title styling */
+        .page-title {
+            text-align: center;
+            font-size: 2rem;
+            color: #007bff; /* Blue color */
+            margin-top: 20px;
+        }
+
+        /* Container for movie cards */
         .container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Adjust for responsiveness */
+            grid-template-columns: repeat(3, 1fr); /* Three cards per row */
             gap: 20px;
             margin: 50px auto;
             padding: 20px;
@@ -35,9 +42,12 @@
             background-color: rgba(0, 0, 0, 0.8); /* Dark background with transparency */
             color: #ffffff; /* White text for visibility */
             border-radius: 10px;
-            padding: 20px;
+            padding: 15px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
             text-align: center;
+            height: auto; /* Adjust height dynamically based on content */
+            width: 100%;
+            max-width: 1000px; /* Max width to match the image dimensions */
         }
 
         .movie-card h3 {
@@ -48,6 +58,16 @@
         .movie-card p {
             margin: 5px 0;
             font-size: 1rem;
+        }
+
+        /* Movie image styling */
+        .movie-card img {
+            width: 100%; /* Full width of the movie card */
+            max-width: 1000px; /* Adjust image width to match card's max-width */
+            max-height: 1500px; /* Image max height to fit the image dimensions */
+            object-fit: cover; /* Ensures image fills the area without distortion */
+            border-radius: 10px;
+            margin-bottom: 15px;
         }
 
         .btn-custom {
@@ -75,27 +95,39 @@
         }
 
         /* Responsiveness for mobile */
-        @media (max-width: 576px) {
-            .movie-card {
-                padding: 15px;
-                font-size: 0.9rem;
+        @media (max-width: 992px) {
+            .container {
+                grid-template-columns: repeat(2, 1fr); /* Two cards per row on smaller screens */
             }
         }
 
-        /* Attribution */
-        .attribution {
-            text-align: center;
-            font-size: 12px;
-            color: white;
-            margin-top: 20px;
+        @media (max-width: 576px) {
+            .container {
+                grid-template-columns: 1fr; /* One card per row on very small screens */
+            }
+
+            .movie-card img {
+                max-height: 800px; /* Smaller image on mobile */
+            }
         }
+
     </style>
 </head>
 <body>
 
+<!-- Title Section -->
+<div class="page-title">
+    <h1>Movie Report</h1>
+</div>
+
 <div class="container">
     <c:forEach items="${movieList}" var="movie">
         <div class="movie-card">
+            <!-- Display Movie Image -->
+            <img 
+                src="${movie.url != null ? movie.url : 'https://via.placeholder.com/800x1200'}" 
+                alt="${movie.movieName}" 
+                class="img-fluid">
             <h3>${movie.movieName}</h3>
             <p><strong>Movie Number:</strong> ${movie.movieId}</p>
             <p><strong>Language:</strong> ${movie.language}</p>
@@ -125,11 +157,6 @@
 <!-- Return to Index -->
 <div class="return-link">
     <a href="/index">Return to Index</a>
-</div>
-
-<!-- Attribution -->
-<div class="attribution">
-    Image by <a href="https://thumbs.dreamstime.com/b/movie-film-strip-reel-popcorn-background-cinema-concept-321870052.jpg" target="_blank" style="color: white;">blank</a>
 </div>
 
 <!-- Bootstrap JS -->

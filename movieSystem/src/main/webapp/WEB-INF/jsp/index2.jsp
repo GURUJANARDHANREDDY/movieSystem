@@ -114,31 +114,31 @@
         <div class="dropdown">
             <button class="dropbtn">Movie Management</button>
             <div class="dropdown-content">
-                 <a href="/movieReportLanguage">Movie Reportbylanguage</a>
+                
                <!---- <a href="/">Movie Update</a>
                 <a href="/">Movie Deletion</a>--->
                 <a href="/movieReport">Movie Report</a> 
             </div>
         </div>
 
-        <div class="dropdown">
+       <!--  <div class="dropdown">
             <button class="dropbtn">Theater Management</button>
             <div class="dropdown-content">
                 <!-- <a href="/">Theater Addition</a>
                  <a href="/">Theater Update</a>
-                <a href="/">Theater Deletion</a> -->
+                <a href="/">Theater Deletion</a> 
                 <a href="/">Theater Reports</a> 
             </div> 
-        </div> 
+        </div> --->
 
-        <!-- Removed Showtime Management section for now -->
+       
 
         <div class="dropdown">
             <button class="dropbtn">Booking Management</button>
             <div class="dropdown-content">
-                <a href="/">New Booking</a>
-                <a href="/">Booking Update</a>
-                <a href="/">Cancellation</a>
+                <a href="/movieReportLanguage"> movieReportLanguage & Booking</a>
+                <!-- <a href="/">Booking Update</a>-->
+                <a href="/viewBookings">Cancellation</a>
             </div>
         </div>
 

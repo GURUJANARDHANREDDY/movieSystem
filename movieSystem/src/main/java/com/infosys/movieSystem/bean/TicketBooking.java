@@ -1,12 +1,15 @@
 package com.infosys.movieSystem.bean;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
 public class TicketBooking {
 
-    @Id   
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Or GenerationType.SEQUENCE depending on DB
     private Long ticketId;
     private String movieName;
     private String showTimeName;
