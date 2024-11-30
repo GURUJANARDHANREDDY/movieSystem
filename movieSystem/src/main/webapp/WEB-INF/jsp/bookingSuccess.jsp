@@ -1,8 +1,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking Success</title>
+    <!-- Bootstrap CDN for styling -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -61,7 +65,7 @@
     <div class="content">
         <p class="success-msg">Your booking has been confirmed!</p>
         <p class="transaction-id">Transaction ID: ${ticket.transactionId}</p>
-        <table>
+        <table class="table">
             <tr>
                 <th>Movie Name</th>
                 <td>${ticket.movieName}</td>
@@ -79,16 +83,23 @@
                 <td>${ticket.numberOfSeatBooking}</td>
             </tr>
             <tr>
-                <th>Total Amount</th>
-                <td>$${ticket.amountPayable}</td>
+                <th>Total Amount (INR)</th>
+                <td>${ticket.amountPayable}</td> <!-- Amount in INR -->
             </tr>
             <tr>
                 <th>Status</th>
                 <td>${ticket.status}</td>
             </tr>
         </table>
+        <!-- Bootstrap button for "Back" link -->
+        <a href="/index" class="btn btn-primary">Back</a>
         <p>Thank you for booking with us!</p>
     </div>
     <footer>&copy; 2024 Movie Booking System. All rights reserved.</footer>
+
+    <!-- Bootstrap JS and Popper.js for functionality -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

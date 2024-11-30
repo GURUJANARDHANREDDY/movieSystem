@@ -16,26 +16,31 @@ public class MovieShowDaoImpl implements MovieShowDao {
 
     @Override
     public void save(MovieShow movieShow) {
-        repository.save(movieShow);
+        repository.save(movieShow); // Save MovieShow entity
     }
 
     @Override
     public List<MovieShow> findAll() {
-        return repository.findAll();
+        return repository.findAll(); // Get all MovieShows
     }
 
     @Override
     public List<MovieShowEmbed> getAllIds() {
-        return repository.getAllIds();
+        return repository.getAllIds(); // Get all MovieShow IDs
     }
 
     @Override
     public void deleteMovieShowById(MovieShowEmbed id) {
-        repository.deleteById(id);
+        repository.deleteById(id); // Delete MovieShow by ID
     }
 
     @Override
     public MovieShow getMovieShowById(MovieShowEmbed id) {
-        return repository.findById(id).orElse(null);
+        return repository.findById(id).orElse(null); // Get MovieShow by ID, or null if not found
+    }
+
+    @Override
+    public void updateMovieShow(MovieShow movieShow) {
+        repository.save(movieShow); // Save or update MovieShow (JPA handles both save and update)
     }
 }

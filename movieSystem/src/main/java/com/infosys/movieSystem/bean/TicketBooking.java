@@ -4,13 +4,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class TicketBooking {
 
     @Id 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Or GenerationType.SEQUENCE depending on DB
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  
     private Long ticketId;
+    
     private String movieName;
     private String showTimeName;
     private String seatType;
@@ -19,15 +21,19 @@ public class TicketBooking {
     private String transactionId;
     private String status;
 
+    // Added Movie property (Many-to-One relationship with Movie entity)
+    @ManyToOne
+    private Movie movie;
+
     // Default constructor
     public TicketBooking() {
         super();
-         // Default status
+        this.status = "Confirmed";  
     }
 
     // Parameterized constructor
     public TicketBooking(Long ticketId, String movieName, String showTimeName, String seatType, 
-                         Integer numberOfSeatBooking, Double amountPayable, String transactionId, String status) {
+                         Integer numberOfSeatBooking, Double amountPayable, String transactionId, String status, Movie movie) {
         super();
         this.ticketId = ticketId;
         this.movieName = movieName;
@@ -37,22 +43,10 @@ public class TicketBooking {
         this.amountPayable = amountPayable;
         this.transactionId = transactionId;
         this.status = status;
+        this.movie = movie;  // Initialize the movie object
     }
 
-    // Overloaded constructor with fewer parameters
-    public TicketBooking(Long ticketId, String movieName, String showTimeName) {
-        super();
-        this.ticketId = ticketId;
-        this.movieName = movieName;
-        this.showTimeName = showTimeName;
-        this.seatType = "";
-        this.numberOfSeatBooking = 0;
-        this.amountPayable = 0.0;
-        this.transactionId = "";
-        this.status = "Confirmed";
-    }
-
-    // Getters and Setters
+    // Getters and Setters for all fields
     public Long getTicketId() {
         return ticketId;
     }
@@ -117,11 +111,19 @@ public class TicketBooking {
         this.status = status;
     }
 
+    public Movie getMovie() {
+        return movie;
+    }
+
+    public void setMovie(Movie movie) {
+        this.movie = movie;
+    }
+
     @Override
     public String toString() {
         return "TicketBooking [ticketId=" + ticketId + ", movieName=" + movieName + 
                ", showTimeName=" + showTimeName + ", seatType=" + seatType +
                ", numberOfSeatBooking=" + numberOfSeatBooking + ", amountPayable=" + amountPayable + 
-               ", transactionId=" + transactionId + ", status=" + status + "]";
+               ", transactionId=" + transactionId + ", status=" + status + ", movie=" + movie + "]";
     }
 }

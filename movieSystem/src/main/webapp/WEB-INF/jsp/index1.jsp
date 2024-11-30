@@ -158,10 +158,10 @@
         <div class="dropdown">
             <button class="dropbtn">Booking Management</button>
             <div class="dropdown-content">
-                <a href="/movieReportLanguage">Movie Report By Language & Booking</a>
+                <a href="/movieReportLanguage">Movie Report By Language</a>
                <!--- <a href="/">Booking Update</a>--->
-                <a href="/viewBookings">Cancellation</a>
-                <a href="/">Booking Report</a>
+                <a href=>Cancellation</a>
+                <a href="/movieBookings">Booking Report</a>
             </div>
         </div>
 
