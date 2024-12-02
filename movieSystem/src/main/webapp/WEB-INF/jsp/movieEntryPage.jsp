@@ -106,6 +106,17 @@
             text-align: center;
             font-weight: bold;
         }
+
+        .video-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+        }
     </style>
 </head>
 <body>
@@ -114,9 +125,9 @@
     <h2>Movie Entry Page</h2>
     <form:form id="movieForm" action="/addMovie" method="post" modelAttribute="movieRecord" class="mt-4">
 
-        <div class="mb-3">
+       <div class="mb-3">
             <label class="form-label">Enter Movie Id</label>
-            <form:input path="movieId" id="movieId" class="form-control" />
+            <form:input path="movieId" id="movieId" class="form-control" required="true" readonly="true"/>
         </div>
 
         <div class="mb-3">
@@ -143,11 +154,22 @@
             <label class="form-label">Enter Ratings</label>
             <form:input id="ratings" path="ratings" class="form-control" />
         </div>
+
         <div class="mb-3">
-    <label class="form-label">Enter Movie URL</label>
-    <form:input id="url" path="url" class="form-control" />
-</div>
-        
+            <label class="form-label">Enter Movie URL</label>
+            <form:input id="url" path="url" class="form-control" />
+        </div>
+
+        <!-- Added Video URL Input Field -->
+        <div class="mb-3">
+            <label class="form-label">Enter Video URL</label>
+            <form:input id="videoUrl" path="videoUrl" class="form-control" oninput="updateVideo()" />
+        </div>
+
+        <div class="video-container">
+            <h3>YouTube Video Preview</h3>
+            <iframe id="videoPlayer" src="" title="YouTube Video Player"></iframe>
+        </div>
 
         <div class="showtime-heading">
             <h2>ShowTime Entry</h2>
@@ -184,6 +206,21 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    function updateVideo() {
+        var videoUrl = document.getElementById('videoUrl').value;
+        var videoId = extractVideoId(videoUrl);
+        if (videoId) {
+            document.getElementById('videoPlayer').src = "https://www.youtube.com/embed/" + videoId;
+        }
+    }
+
+    function extractVideoId(url) {
+        var match = url.match(/(?:https?:\/\/(?:www\.)?youtube\.com\/(?:[^\/]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+        return match ? match[1] : null;
+    }
+</script>
 
 </body>
 </html>

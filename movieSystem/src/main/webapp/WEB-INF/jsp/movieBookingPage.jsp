@@ -18,6 +18,34 @@
             padding: 0;
             height: 100vh;
         }
+        .back-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 1.2em;
+    display: inline-block;
+    width: 150px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    text-decoration: none; /* remove underline */
+    margin-top: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 123, 255, 0.4); /* Add a soft shadow */
+    outline: none; /* Remove outline when clicked */
+}
+
+.back-btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-3px); /* Slight upward movement on hover */
+}
+
+.back-btn:active {
+    background-color: #004085;
+    transform: translateY(0); /* Return to original position on click */
+}
+        
 
         header {
             background-color: #28a745;
@@ -90,6 +118,26 @@
 
         .seat-number {
             width: 100%;
+        }
+
+        .back-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2em;
+            display: inline-block;
+            width: 150px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-decoration: none; /* remove underline */
+            margin-top: 20px;
+        }
+
+        .back-btn:hover {
+            background-color: #0056b3;
         }
 
         .seat-type-select {
@@ -175,6 +223,7 @@
     </form>
 
     <!-- Back Button -->
+   <a href="/index" class="back-btn">Back</a>
 
 </div>
 

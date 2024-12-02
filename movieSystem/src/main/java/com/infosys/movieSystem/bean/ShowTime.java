@@ -66,6 +66,9 @@ public class ShowTime {
 		this.showTimePremierePrice = showTimePremierePrice;
 	}
 
+
+	
+
 	
 	
 	

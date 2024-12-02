@@ -11,6 +11,9 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
         /* Background styling */
         body {
@@ -41,9 +44,9 @@
             text-align: center;
             margin-bottom: 30px;
             font-weight: bold;
-            font-size: 30px;
-            color: #f1f1f1; /* White color for better visibility */
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8); /* Darker shadow for contrast */
+            font-size: 36px;
+            color: #f1f1f1;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
         }
 
         /* Movie list grid layout */
@@ -55,7 +58,7 @@
 
         /* Individual movie item card */
         .movie-item {
-            background-color: rgba(0, 0, 0, 0.7); /* Darker background for readability */
+            background-color: rgba(0, 0, 0, 0.7);
             padding: 20px;
             border-radius: 10px;
             text-align: center;
@@ -72,16 +75,16 @@
         /* Styling movie names */
         .movie-item h3 {
             margin-bottom: 15px;
-            font-size: 22px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Adding shadow to enhance readability */
-            color: #f1f1f1; /* White color for movie names */
+            font-size: 24px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            color: #f1f1f1;
         }
 
         /* Styling movie details */
         .movie-item p {
             margin: 5px 0;
-            font-size: 16px;
-            color: #d1d1d1; /* Lighter color for details */
+            font-size: 18px;
+            color: #d1d1d1;
         }
 
         /* Movie image styling */
@@ -92,6 +95,55 @@
             margin-bottom: 15px;
         }
 
+        /* Video styling */
+        .movie-item video {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        /* Button Styling */
+        .movie-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            font-size: 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .movie-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .icon-btn {
+            font-size: 24px;
+            color: #ff4d4d;
+            margin: 5px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .icon-btn:hover {
+            color: #d9534f;
+        }
+
+        .return-link {
+            color: #fff;
+            font-size: 20px;
+            text-align: center;
+            display: block;
+            margin-top: 30px;
+        }
+
+        .return-link:hover {
+            text-decoration: underline;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 576px) {
             .movie-item h3 {
@@ -99,30 +151,8 @@
             }
 
             .movie-item p {
-                font-size: 14px;
+                font-size: 16px;
             }
-        }
-
-        /* Additional Styling for the deletion link and return button */
-        .book-movie {
-            color: #ff4d4d;
-            font-size: 16px;
-        }
-
-        .book-movie:hover {
-            text-decoration: underline;
-        }
-
-        .return-link {
-            color: #fff;
-            font-size: 18px;
-            display: block;
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .return-link:hover {
-            text-decoration: underline;
         }
     </style>
 </head>
@@ -137,19 +167,25 @@
                 <img src="${movie.url}" alt="${movie.movieName} Image" />
 
                 <h3>${movie.movieName}</h3>
+
+              
+
                 <c:forEach var="movieShowDTO" items="${movieMap[movie.movieId]}">
                     <p>Showtime: ${movieShowDTO.showTimeName}</p>
                     <p>Royal Seats: ${movieShowDTO.royalSeatNumber} (Booked: ${movieShowDTO.royalBooked})</p>
                     <p>Premier Seats: ${movieShowDTO.premierSeatNumber} (Booked: ${movieShowDTO.premierBooked})</p>
                 </c:forEach>
-                <!-- Movie Deletion Link -->
-                <p><a class="book-movie" href="/bookMovie/${movie.movieId}"> Book Movie </a></p>
+
+                <!-- Movie Action Buttons -->
+                <p><a class="movie-btn" href="/bookMovie/${movie.movieId}">Book Movie</a></p>
             </div>
         </c:forEach>
     </div>
 
-    <!-- Return Link -->
-    <h3><a class="return-link" href="/index">Return</a></h3>
+    <!-- Return Button -->
+    <p class="text-center">
+        <a class="btn btn-secondary" href="/index">Return</a>
+    </p>
 </div>
 
 <!-- Bootstrap JS -->

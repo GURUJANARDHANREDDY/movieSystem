@@ -1,5 +1,7 @@
 package com.infosys.movieSystem.dao;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -13,4 +15,7 @@ public interface TicketBookingRepository extends JpaRepository<TicketBooking, Lo
     public Long getLastId();
 
 	public TicketBooking findByTransactionId(String transactionId);
+	@Query("SELECT t FROM TicketBooking t JOIN FETCH t.movie")
+	List<TicketBooking> findAllWithMovies();
+
 }

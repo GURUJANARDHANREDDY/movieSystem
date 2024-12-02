@@ -14,6 +14,7 @@ public class Movie {
     private Integer duration;
     private Double ratings;
     private String url;
+    private String videoUrl;  // Added videoUrl field
 
     // Default Constructor
     public Movie() {
@@ -26,8 +27,8 @@ public class Movie {
         this.movieId = movieId;
     }
 
-    // Constructor with all fields (except URL)
-    public Movie(String movieId, String movieName, String language, String genre, Integer duration, Double ratings, String url) {
+    // Constructor with all fields (including videoUrl)
+    public Movie(String movieId, String movieName, String language, String genre, Integer duration, Double ratings, String url, String videoUrl) {
         super();
         this.movieId = movieId;
         this.movieName = movieName;
@@ -35,7 +36,8 @@ public class Movie {
         this.genre = genre;
         this.duration = duration;
         this.ratings = ratings;
-        this.url = url; // Initialize URL properly
+        this.url = url;
+        this.videoUrl = videoUrl;  // Initialize videoUrl properly
     }
 
     // Getters and Setters
@@ -95,17 +97,25 @@ public class Movie {
         this.url = url;
     }
 
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
     // toString Method
     @Override
     public String toString() {
         return "Movie [movieId=" + movieId + ", movieName=" + movieName + ", language=" + language + ", genre=" + genre
-                + ", duration=" + duration + ", ratings=" + ratings + ", url=" + url + "]";
+                + ", duration=" + duration + ", ratings=" + ratings + ", url=" + url + ", videoUrl=" + videoUrl + "]";
     }
 
-	public double getTicketPrice() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    public double getTicketPrice() {
+        // Placeholder for ticket price calculation logic
+        return 0;
+    }
 
     // Uncommented example of generating a new movie ID
     // You would typically move this logic to a service class

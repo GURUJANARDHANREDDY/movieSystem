@@ -1,7 +1,5 @@
 package com.infosys.movieSystem.controller;
 
- 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +7,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-
 import com.infosys.movieSystem.bean.Movie;
 import com.infosys.movieSystem.bean.MovieShow;
 import com.infosys.movieSystem.bean.MovieShowDTO;
@@ -30,18 +26,13 @@ import com.infosys.movieSystem.bean.MovieShowEmbed;
 import com.infosys.movieSystem.bean.ShowTime;
 import com.infosys.movieSystem.bean.TicketBooking;
 import com.infosys.movieSystem.dao.MovieDao;
-
 import com.infosys.movieSystem.dao.MovieShowDao;
 import com.infosys.movieSystem.dao.ShowTimeDao;
 import com.infosys.movieSystem.dao.TicketBookingDao;
 import com.infosys.movieSystem.service.MovieUserService;
 import com.infosys.movieSystem.service.ShowTimeService;
 
-
 import jakarta.servlet.http.HttpServletRequest;
-
-
-
 
 
 @RestController
@@ -58,12 +49,12 @@ public class MovieController {
 	
 	@Autowired
 	private MovieShowDao movieShowDao;
-	   @Autowired
-	    private TicketBookingDao ticketBookingDao;
-	   @Autowired
-	
-	
 	 
+	@Autowired
+	private TicketBookingDao ticketBookingDao;
+
+	@Autowired
+	 private MovieUserService movieUserService;  
 	
 	@GetMapping("/addShowTime")
 	public ModelAndView showTimeEntryPage() {
@@ -96,13 +87,13 @@ public class MovieController {
 		showTimeDao.deleteShowTimeById(id);
 		return new ModelAndView("redirect:/showTimeReport");
 	}
+	
+	
 	@GetMapping("/showTimeUpdation/{id}")
 	public ModelAndView showTimeUpdatePage(@PathVariable Integer id) {
-	    // Retrieve ShowTime by ID
 	    ShowTime showTime = showTimeDao.findById(id);
-	    // Ensure a non-null ShowTime object for the view
 	    ModelAndView mv = new ModelAndView("showTimeUpdatePage");
-	    mv.addObject("showTime", showTime != null ? showTime : new ShowTime()); // Provide a fallback if not found
+	    mv.addObject("showTime", showTime != null ? showTime : new ShowTime()); 
 	    return mv;
 	}
 
@@ -110,14 +101,9 @@ public class MovieController {
 
 	@PostMapping("/showTimeUpdation")
 	public ModelAndView updateShowTime(@ModelAttribute("showTime") ShowTime showTime) {
-	    // Calculate the royal price based on premiere price
 	    Double royalPrice = showTimeService.createRoyalPrice(showTime.getShowTimePremierePrice());
-	    showTime.setShowTimeRoyalPrice(royalPrice); // Set the calculated royal price
-
-	    // Save the updated ShowTime object
+	    showTime.setShowTimeRoyalPrice(royalPrice); 
 	    showTimeDao.save(showTime);
-
-	    // Redirect to the Show Time Report page
 	    return new ModelAndView("redirect:/showTimeReport");
 	}
 
@@ -223,6 +209,7 @@ public class MovieController {
 
 	    return new ModelAndView("redirect:/movieReport");
 	}
+	
 	@GetMapping("/updateMovie/{id}")
 	public ModelAndView showMovieUpdatePage(@PathVariable String id) {
 	    // Fetch the movie details based on the movieId
@@ -243,10 +230,11 @@ public class MovieController {
 	    // Find the existing movie from the database using the movieId
 	    Movie existingMovie = movieDao.findById(movieId);
 
-	    // Update the movie details (only duration and ratings are updated)
+	    // Update the movie details (including videoUrl)
+	    existingMovie.setUrl(movie.getUrl());
+	    existingMovie.setVideoUrl(movie.getVideoUrl()); // Set the new video URL
 	    existingMovie.setDuration(movie.getDuration());
 	    existingMovie.setRatings(movie.getRatings());
-	    existingMovie.setUrl(movie.getUrl());
 
 	    // Save the updated movie back to the database
 	    movieDao.save(existingMovie);
@@ -254,6 +242,7 @@ public class MovieController {
 	    // Redirect to the movie report or movie details page
 	    return new ModelAndView("redirect:/movieReport");
 	}
+
 	@GetMapping("/movieDeletion/{id}")
 	public ModelAndView movieDeletion(@PathVariable String id) {
 		List<MovieShowEmbed> embedList = movieShowDao.getAllIds();
@@ -267,84 +256,75 @@ public class MovieController {
 		movieDao.deleteMovieById(id);
 		return new ModelAndView("redirect:/movieReport");
 	}
-	@Autowired
-	private MovieUserService movieUserService;
-
-	@GetMapping("/movieReportLanguage")
-	public ModelAndView showSelectLanguagePage() {
-	    Set<String> languageSet = movieDao.getAllLanguages();
-	    ModelAndView mv = new ModelAndView("selectLanguagePage");
-	    mv.addObject("languageSet", languageSet);
-	    return mv;
-	}
-
-	@PostMapping("/movieReportLanguage")
-	public ModelAndView showMovieReportByLanguagePage(@RequestParam("languages") String language) {
-	    // Determine the user's role
-	    String role = movieUserService.getRole();
-	    String page;
-
-	    // Assign the page based on role
-	    if ("Admin".equalsIgnoreCase(role)) {
-	        page = "movieReportByLanguage1"; // Admin's JSP
-	    } else if ("Customer".equalsIgnoreCase(role)) {
-	        page = "movieReportByLanguage2"; // Customer's JSP
-	    } else {
-	        return new ModelAndView("errorPage"); // Handle undefined role
+	 @GetMapping("/movieReportLanguage")
+	    public ModelAndView showSelectLanguagePage() {
+	        Set<String> languageSet = movieDao.getAllLanguages(); 
+	        ModelAndView mv = new ModelAndView("selectLanguagePage"); 
+	        mv.addObject("languageSet", languageSet);
+	        return mv;
 	    }
+	 @PostMapping("/movieReportLanguage")
+	 public ModelAndView showMovieReportByLanguagePage(@RequestParam("languages") String language) {
+	     // Fetch all showtimes
+	     List<ShowTime> showTimeList = showTimeDao.findAll();
+	     Map<Integer, String> showMap = new HashMap<>();
 
-	    // Fetch all showtimes
-	    List<ShowTime> showTimeList = showTimeDao.findAll();
-	    Map<Integer, String> showMap = new HashMap<>();
 
-	    // Populate showMap with showtime ID and name
-	    for (ShowTime showTime : showTimeList) {
-	        showMap.put(showTime.getShowTimeId(), showTime.getShowTimeName());
-	    }
+	     // Populate showMap with showtime ID and name
+	     for (ShowTime showTime : showTimeList) {
+	         showMap.put(showTime.getShowTimeId(), showTime.getShowTimeName());
+	     }
 
-	    // Fetch movies based on the selected language
-	    List<Movie> movieList = movieDao.getLanguagewiseMovieList(language);
+	     // Fetch movies based on the selected language
+	     List<Movie> movieList = movieDao.getLanguagewiseMovieList(language);
 
-	    // Fetch all movie show entries
-	    List<MovieShow> movieShowList = movieShowDao.findAll();
-	    Map<String, List<MovieShowDTO>> movieMap = new HashMap<>();
+	     // Fetch all movie show entries
+	     List<MovieShow> movieShowList = movieShowDao.findAll();
+	     Map<String, List<MovieShowDTO>> movieMap = new HashMap<>();
 
-	    // Process movie show data
-	    for (Movie movie : movieList) {
-	        List<MovieShowDTO> dtoList = new ArrayList<>();
-	        String movieId = movie.getMovieId();
+	     // Process movie show data
+	     for (Movie movie : movieList) {
+	         List<MovieShowDTO> dtoList = new ArrayList<>();
+	         String movieId = movie.getMovieId();
 
-	        for (MovieShow movieShow : movieShowList) {
-	            MovieShowEmbed id = movieShow.getEmbeddedId();
-	            if (movieId.equals(id.getMovieId())) {
-	                String showTimeName = showMap.get(id.getShowTimeId());
-	                Integer royalSeatNumber = movieShow.getRoyalSeatNumber();
-	                Integer premierSeatNumber = movieShow.getPremierSeatNumber();
-	                Integer royalBooked = movieShow.getRoyalBooked();
-	                Integer premierBooked = movieShow.getPremierBooked();
+	         for (MovieShow movieShow : movieShowList) {
+	             MovieShowEmbed id = movieShow.getEmbeddedId();
+	             if (movieId.equals(id.getMovieId())) {
+	            	 String showTimeName=showMap.get(id.getShowTimeId());
+	                 Integer royalSeatNumber = movieShow.getRoyalSeatNumber();
+	                 Integer premierSeatNumber = movieShow.getPremierSeatNumber();
+	                 Integer royalBooked = movieShow.getRoyalBooked();
+	                 Integer premierBooked = movieShow.getPremierBooked();
 
-	                // Create MovieShowDTO for each movieShow
-	                MovieShowDTO movieShowDTO = new MovieShowDTO(
-	                    showTimeName, movieId, royalSeatNumber, premierSeatNumber, royalBooked, premierBooked
-	                );
-	                dtoList.add(movieShowDTO);
+	                 // Create MovieShowDTO for each movieShow
+	                 MovieShowDTO movieShowDTO = new MovieShowDTO(
+	                     showTimeName, movieId, royalSeatNumber, premierSeatNumber, royalBooked, premierBooked
+	                 );
+	                 dtoList.add(movieShowDTO);
+	             }
+	         }
+
+	         // Add movieId and its related MovieShowDTO list to movieMap
+	         movieMap.put(movieId, dtoList);
+	     }
+
+	     // Prepare ModelAndView for the movie report page filtered by language
+	     String page = "";
+	     String role = movieUserService.getRole();
+	     if (role != null) {
+	            if (role.equalsIgnoreCase("Admin")) {
+	                page = "movieReportByLanguage1";  // Admin's page
+	            } else if (role.equalsIgnoreCase("Customer")) {
+	                page = "movieReportByLanguage2";  // Customer's page
 	            }
-	        }
+	     }
+	     ModelAndView mv = new ModelAndView(page);
+	     mv.addObject("movieList", movieList);
+	     mv.addObject("movieMap", movieMap);
+	     mv.addObject("selectedLanguage", language);
 
-	        // Add movieId and its related MovieShowDTO list to movieMap
-	        movieMap.put(movieId, dtoList);
-	    }
-
-	    // Prepare ModelAndView for the movie report page filtered by language
-	    ModelAndView mv = new ModelAndView(page);
-	    mv.addObject("movieList", movieList);
-	    mv.addObject("movieMap", movieMap);
-	    mv.addObject("selectedLanguage", language);
-
-	    return mv;
-	}
-
-	 // Inject the MovieUserService to access the role
+	     return mv;
+	 }
 
 	    @GetMapping("/movieReport")
 	    public ModelAndView showMovieReportPage() {
@@ -414,9 +394,7 @@ public class MovieController {
 	        mv.addObject("showMap", showMap);  // Add showMap to the model if needed
 	        return mv;
 	    }
-	   
-
-	  
+	    
 	    @GetMapping("/bookMovie/{id}")
 	    public ModelAndView showBookMoviePage(@PathVariable String id) {
 	        Movie movie = movieDao.findById(id);
@@ -443,7 +421,7 @@ public class MovieController {
 	            }
 	        }
 
-	        ModelAndView mv = new ModelAndView("movieBookPage");
+	        ModelAndView mv = new ModelAndView("movieBookingPage");
 	        mv.addObject("movie", movie);
 	        mv.addObject("movieShowList", movieShowList);
 	        return mv;
@@ -451,25 +429,52 @@ public class MovieController {
 	    @GetMapping("/bookSeats")
 	    public ModelAndView showBookingForm(@RequestParam String movieId) {
 	        // Retrieve movie details by movieId
-	    return new ModelAndView("/movieBookPage");
+	    return new ModelAndView("/movieBookingPage");
 	    }
-
 	    @PostMapping("/bookSeats")
 	    public ModelAndView processBooking(
-	            @RequestParam String movieId,
-	            @RequestParam String movieName,
-	            @RequestParam String selectedShowTime,
+	            @RequestParam(required = false) String movieId,
+	            @RequestParam(required = false) String movieName,
+	            @RequestParam(required = false) String selectedShowTime,
 	            @RequestParam Map<String, String> allParams) {
+
+	        ModelAndView mv = new ModelAndView();
+
+	        // Validate required fields
+	        if (movieId == null || movieId.isEmpty() || 
+	            movieName == null || movieName.isEmpty() || 
+	            selectedShowTime == null || selectedShowTime.isEmpty()) {
+
+	            mv.setViewName("bookingError");
+	            mv.addObject("errorMessage", "All fields are required. Please select a movie, show time, and seat type.");
+	            return mv;
+	        }
 
 	        // Extract seat type and number of seats dynamically
 	        String seatType = allParams.get("seatType_" + selectedShowTime);
-	        Integer numberOfSeats = Integer.valueOf(allParams.get("numberOfSeats_" + selectedShowTime));
+	        String numberOfSeatsStr = allParams.get("numberOfSeats_" + selectedShowTime);
+
+	        if (seatType == null || numberOfSeatsStr == null || numberOfSeatsStr.isEmpty()) {
+	            mv.setViewName("bookingError");
+	            mv.addObject("errorMessage", "Please select a seat type and enter the number of seats.");
+	            return mv;
+	        }
+
+	        Integer numberOfSeats;
+	        try {
+	            numberOfSeats = Integer.valueOf(numberOfSeatsStr);
+	        } catch (NumberFormatException e) {
+	            mv.setViewName("bookingError");
+	            mv.addObject("errorMessage", "Invalid number of seats entered. Please enter a valid number.");
+	            return mv;
+	        }
 
 	        // Fetch the ShowTime object based on selectedShowTime
 	        ShowTime showTime = showTimeDao.getShowTime(selectedShowTime);
-
 	        if (showTime == null) {
-	            throw new IllegalArgumentException("Selected show time not found.");
+	            mv.setViewName("bookingError");
+	            mv.addObject("errorMessage", "Selected show time not found.");
+	            return mv;
 	        }
 
 	        // Retrieve the MovieShow entity using movieId and showTimeId
@@ -480,28 +485,32 @@ public class MovieController {
 	        int availableRoyalSeats = movieShow.getRoyalSeatNumber() - movieShow.getRoyalBooked();
 	        int availablePremierSeats = movieShow.getPremierSeatNumber() - movieShow.getPremierBooked();
 
-	        // Ensure the availability check for the selected seat type
+	        // Check seat availability
 	        if ("royal".equalsIgnoreCase(seatType)) {
 	            if (availableRoyalSeats < numberOfSeats) {
-	                // Not enough Royal seats available
-	                ModelAndView mv = new ModelAndView("bookingError");
+	                mv.setViewName("bookingError");
 	                mv.addObject("errorMessage", "Not enough Royal seats available.");
 	                return mv;
 	            }
 	        } else if ("premier".equalsIgnoreCase(seatType)) {
 	            if (availablePremierSeats < numberOfSeats) {
-	                // Not enough Premier seats available
-	                ModelAndView mv = new ModelAndView("bookingError");
+	                mv.setViewName("bookingError");
 	                mv.addObject("errorMessage", "Not enough Premier seats available.");
 	                return mv;
 	            }
+	        } else {
+	            mv.setViewName("bookingError");
+	            mv.addObject("errorMessage", "Invalid seat type selected.");
+	            return mv;
 	        }
 
-	        // Retrieve prices based on seat type from ShowTime object
+	        // Retrieve prices based on seat type
 	        double seatPrice = "royal".equalsIgnoreCase(seatType) ? showTime.getShowTimeRoyalPrice() : showTime.getShowTimePremierePrice();
+	        Movie movie = movieDao.findById(movieId);
 
 	        // Create a new ticket booking
 	        TicketBooking ticket = new TicketBooking();
+	        ticket.setMovie(movie);
 	        ticket.setMovieName(movieName);
 	        ticket.setShowTimeName(selectedShowTime);
 	        ticket.setSeatType(seatType);
@@ -524,7 +533,7 @@ public class MovieController {
 	        // Update the MovieShow entity with the new booked seats count
 	        if ("royal".equalsIgnoreCase(seatType)) {
 	            movieShow.setRoyalBooked(movieShow.getRoyalBooked() + numberOfSeats);
-	        } else if ("premier".equalsIgnoreCase(seatType)) {
+	        } else {
 	            movieShow.setPremierBooked(movieShow.getPremierBooked() + numberOfSeats);
 	        }
 
@@ -532,7 +541,7 @@ public class MovieController {
 	        movieShowDao.save(movieShow);
 
 	        // Return success page
-	        ModelAndView mv = new ModelAndView("bookingSuccess");
+	        mv.setViewName("bookingSuccess");
 	        mv.addObject("ticket", ticket);
 	        return mv;
 	    }
@@ -562,7 +571,7 @@ public class MovieController {
 		        return modelAndView;
 		    }
 
-		    // Step 2: Check if ticket exists in the database
+		    // Step 2: Check if the ticket exists in the database
 		    Optional<TicketBooking> ticketOptional = Optional.ofNullable(ticketBookingDao.getTicket(ticketId));
 		    if (ticketOptional.isEmpty()) {
 		        modelAndView.setViewName("errorPage");
@@ -572,35 +581,21 @@ public class MovieController {
 
 		    TicketBooking ticket = ticketOptional.get();
 
-		    // Step 3: Cancel the ticket (e.g., update status or remove entry)
+		    // Step 3: Check if the ticket is already canceled
+		    if ("Cancelled".equalsIgnoreCase(ticket.getStatus())) {
+		        modelAndView.setViewName("errorPage");
+		        modelAndView.addObject("error", "Ticket is already cancelled.");
+		        return modelAndView;
+		    }
+
+		    // Step 4: Cancel the ticket (update status)
 		    ticket.setStatus("Cancelled");
 		    ticketBookingDao.save(ticket); // Save the updated ticket to the database
 
-		    // Step 4: Return confirmation page
+		    // Step 5: Return confirmation page
 		    modelAndView.setViewName("cancelConfirmation");
 		    modelAndView.addObject("message", "Ticket with ID " + ticketId + " has been successfully cancelled.");
 		    return modelAndView;
 		}
-
-
-
-	 
-
-
-	 
-
-
-
-	    
-	}
-
-
-	     
-	
-
-    
-
-	 
- 
-
-	
+		
+}

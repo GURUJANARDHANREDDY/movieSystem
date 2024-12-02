@@ -161,16 +161,15 @@
                 <div class="col-md-4">
                     <div class="movie-card">
                         <!-- Movie Image -->
-                        <img 
-                            src="${ticket.movie.url != null ? ticket.movie.url : 'https://via.placeholder.com/800x1200'}" 
-                            alt="${ticket.movie.movieName}" 
-                            class="movie-image">
+                        
+                            <img src="${ticket.movie.url != null ?ticket.movie.url : 'https://via.placeholder.com/800x1200'}" alt="${movie.movieName}" class="movie-image">
+ 
+
                         
                         <!-- Movie Details -->
                         <div class="movie-details">
                             <h5 class="movie-name">${ticket.movieName}</h5>
-                             <p><strong>Ticket Id:</strong> ${ticket.ticketId}</p>
-                            
+                            <p><strong>Ticket Id:</strong> ${ticket.ticketId}</p>
                             <p><strong>Show Time:</strong> ${ticket.showTimeName}</p>
                             <p><strong>Seats:</strong> ${ticket.numberOfSeatBooking}</p>
                             <p><strong>Total:</strong> ${ticket.amountPayable}</p>
