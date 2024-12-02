@@ -588,14 +588,32 @@ public class MovieController {
 		        return modelAndView;
 		    }
 
-		    // Step 4: Cancel the ticket (update status)
+		    // Step 4: Retrieve the MovieShow entity associated with this ticket
+		    ShowTime showTime = showTimeDao.getShowTime(ticket.getShowTimeName()); // Assuming showTimeName is stored in the ticket
+		    MovieShowEmbed mse = new MovieShowEmbed(ticket.getMovie().getMovieId(), showTime.getShowTimeId());
+		    MovieShow movieShow = movieShowDao.getMovieShowById(mse);
+
+		    // Step 5: Update the royalBooked or premierBooked count based on the seat type
+		    String seatType = ticket.getSeatType(); // This is 'royal' or 'premier'
+		    int numberOfSeats = ticket.getNumberOfSeatBooking(); // Get the number of seats booked
+
+		    if ("royal".equalsIgnoreCase(seatType)) {
+		        movieShow.setRoyalBooked(movieShow.getRoyalBooked() - numberOfSeats);
+		    } else if ("premier".equalsIgnoreCase(seatType)) {
+		        movieShow.setPremierBooked(movieShow.getPremierBooked() - numberOfSeats);
+		    }
+
+		    // Step 6: Save the updated MovieShow entity
+		    movieShowDao.save(movieShow);
+
+		    // Step 7: Cancel the ticket (update status)
 		    ticket.setStatus("Cancelled");
 		    ticketBookingDao.save(ticket); // Save the updated ticket to the database
 
-		    // Step 5: Return confirmation page
+		    // Step 8: Return confirmation page
 		    modelAndView.setViewName("cancelConfirmation");
 		    modelAndView.addObject("message", "Ticket with ID " + ticketId + " has been successfully cancelled.");
 		    return modelAndView;
 		}
-		
+
 }

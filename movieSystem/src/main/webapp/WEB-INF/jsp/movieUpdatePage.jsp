@@ -113,6 +113,12 @@
                 <form:input id="url" path="url" class="form-control" />
             </div>
 
+            <!-- Editable URL field for video -->
+            <div class="mb-3">
+                <label for="videoUrl" class="form-label">Movie Video URL</label>
+                <form:input id="videoUrl" path="videoUrl" class="form-control" />
+            </div>
+
             <!-- Submit and Reset buttons -->
             <div class="text-center">
                 <button type="submit" class="btn btn-custom">Update Movie</button>

@@ -73,14 +73,14 @@
         }
 
         /* Play button container styling */
-        .play-button-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            z-index: 1;
-        }
+      .play-button-container {
+    position: absolute;
+    top: 30%; /* Move the play button up */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 1;
+}
 
         .play-button-container .play-button {
             font-size: 3rem;
@@ -153,7 +153,7 @@
 
 <!-- Title Section -->
 <div class="page-title">
-    <h1>Movie Report</h1>
+    <h1>Now Showing </h1>
 </div>
 
 <div class="container">
