@@ -75,7 +75,7 @@
         /* Play button container styling */
         .play-button-container {
             position: absolute;
-            top: 50%;
+            top: 30%;
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
@@ -153,7 +153,7 @@
 
 <!-- Title Section -->
 <div class="page-title">
-    <h1>Movie Report</h1>
+    <h1>Now Showing</h1>
 </div>
 
 <div class="container">

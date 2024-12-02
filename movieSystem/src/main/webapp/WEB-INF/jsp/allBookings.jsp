@@ -172,7 +172,8 @@
                             <p><strong>Ticket Id:</strong> ${ticket.ticketId}</p>
                             <p><strong>Show Time:</strong> ${ticket.showTimeName}</p>
                             <p><strong>Seats:</strong> ${ticket.numberOfSeatBooking}</p>
-                            <p><strong>Total:</strong> ${ticket.amountPayable}</p>
+                            <p><strong>seatType:</strong>${ticket.seatType}</p>
+                            <p><strong>Total:</strong> ${ticket.amountPayable} </p>
                             <p><strong>Transaction ID:</strong> ${ticket.transactionId}</p>
                             <span class="status-badge ${ticket.status == 'Booked' ? 'active' : 'inactive'}">${ticket.status}</span>
                         </div>
